@@ -1,0 +1,30 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+defaultTasks 'test'
+buildDir = 'out'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.1.5'
+    compile fileTree(dir: 'lib', includes: ['*.jar'])
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '0.7-groovy-2.0'
+    testCompile('org.mockito:mockito-all:1.9.5')
+}
+
+test {
+    outputs.upToDateWhen { false }
+    testLogging.showStandardStreams = true
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
+task "create-dirs" << {
+    sourceSets*.java.srcDirs*.each { it.mkdirs() }
+    sourceSets*.groovy.srcDirs*.each { it.mkdirs() }
+}
+
